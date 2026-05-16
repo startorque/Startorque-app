@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StarTorque | إكسسوارات مرسيدس المتوافقة</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:#080808;color:#e8e8e8;direction:rtl;min-height:100vh}
+:root{--gold:#c8960c;--gold-light:#f0d060;--dark:#0d0d0d;--dark2:#141414;--border:#2a2a2a}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+.btn-gold{background:linear-gradient(135deg,#c8960c,#f0d060);color:#080808;border:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;font-family:inherit}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(200,150,12,.4)}
+.btn-outline{background:transparent;color:#c8960c;border:1.5px solid #c8960c;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;font-family:inherit}
+.btn-outline:hover{background:#c8960c;color:#080808}
+.card{background:#141414;border:1px solid #2a2a2a;border-radius:14px;overflow:hidden;transition:all .3s}
+.card:hover{border-color:#7a5a08;transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.section-title{font-size:28px;font-weight:800;margin-bottom:8px}
+.section-title span{color:#c8960c}
+.section-sub{color:#888;font-size:15px;margin-bottom:32px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#141414;border:1px solid #7a5a08;color:#e8e8e8;padding:14px 28px;border-radius:40px;font-size:14px;z-index:9999}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#141414;border:1px solid #2a2a2a;border-radius:16px;padding:32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:13px;color:#888;margin-bottom:6px;font-weight:500}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#e8e8e8;padding:11px 14px;border-radius:8px;font-size:14px;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#7a5a08}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0d0d0d}
+::-webkit-scrollbar-thumb{background:#7a5a08;border-radius:3px}
+@media(max-width:768px){.section-title{font-size:22px}.modal{padding:22px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useContext, createContext, useEffect } = React;
+
+const CartContext = createContext(null);
+
+const categories = [
+  {id:"welcome-lights",name:"لمبات ترحيبية",icon:"✨"},
+  {id:"ac-vents",name:"فتحات مكيف مضيئة",icon:"💨"},
+  {id:"speakers",name:"سماعات مضيئة",icon:"🔊"},
+  {id:"perfume-device",name:"أجهزة تعطير",icon:"🌸"},
+  {id:"perfume-refills",name:"عبوات العطور",icon:"🧴"},
+  {id:"ambient-lighting",name:"إضاءات محيطية",icon:"💡"},
+  {id:"interior-accessories",name:"إكسسوارات داخلية",icon:"⭐"}
+];
+
+const products = [
+  {id:"ST-WL-001",sku:"ST-WL-001",category:"welcome-lights",name:"لمبات ترحيبية LED للأبواب",description:"لمبات LED ترحيبية بشعار مرسيدس، تضاء تلقائياً عند فتح الباب، متوافقة مع معظم موديلات مرسيدس 2015+",price:149,images:["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"],specs:["LED عالي الإضاءة","تركيب plug & play","شعار مرسيدس","ضمان 6 أشهر"],compatibility:"Mercedes C/E/S/GLC/GLE 2015+",inStock:true,featured:true,supplier:{platform:"Alibaba",sourceUrl:"https://alibaba.com",unitCost:18}},
+  {id:"ST-AC-001",sku:"ST-AC-001",category:"ac-vents",name:"فتحات مكيف مضيئة 7 ألوان RGB",description:"إضاءة محيطية ملونة لفتحات المكيف، 7 ألوان قابلة للتخصيص، تضفي جواً فاخراً على الداخلية",price:199,images:["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&q=80"],specs:["7 ألوان RGB","تحكم بالتطبيق","USB-C","وضع موسيقي"],compatibility:"جميع السيارات",inStock:true,featured:true,supplier:{platform:"AliExpress",sourceUrl:"https://aliexpress.com",unitCost:22}},
+  {id:"ST-SP-001",sku:"ST-SP-001",category:"speakers",name:"سماعات داخلية مضيئة",description:"أطواق LED مضيئة تركب حول سماعات الداخلية، تتزامن مع الموسيقى",price:249,images:["https://images.unsplash.com/photo-1547949003-9792a18a2601?w=600&q=80"],specs:["إضاءة مع الصوت","16 لون","تركيب بدون حفر"],compatibility:"Universal",inStock:true,featured:false,supplier:{platform:"1688",sourceUrl:"https://1688.com",unitCost:28}},
+  {id:"ST-PD-001",sku:"ST-PD-001",category:"perfume-device",name:"جهاز تعطير درج السيارة الذكي",description:"جهاز تعطير أوتوماتيكي يوضع في درج السيارة، شحن USB، تصميم أنيق",price:299,images:["https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80"],specs:["3 مستويات شدة","شحن USB-C","خزان 10ml"],compatibility:"جميع السيارات",inStock:true,featured:true,supplier:{platform:"Amazon",sourceUrl:"https://amazon.com",unitCost:45}},
+  {id:"ST-PR-001",sku:"ST-PR-001",category:"perfume-refills",name:"عبوة عطر فاخرة - مسك عود",description:"عبوة إعادة تعبئة بعطر مسك عود فاخر، يدوم حتى 30 يوم",price:89,images:["https://images.unsplash.com/photo-1590156546946-b7b6a8571b11?w=600&q=80"],specs:["10ml","30 يوم","خالٍ من الكحول"],compatibility:"جهاز ST-PD-001",inStock:true,featured:false,supplier:{platform:"Temu",sourceUrl:"https://temu.com",unitCost:8}},
+  {id:"ST-AL-001",sku:"ST-AL-001",category:"ambient-lighting",name:"إضاءة محيطية داخلية 64 لون",description:"طقم إضاءة محيطية كامل، 64 لون، يشمل الأبواب والسقف والأرضية",price:449,images:["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80"],specs:["64 لون","تحكم بالتطبيق","6 متر LED"],compatibility:"Mercedes C/E/S/GLC/GLE",inStock:true,featured:true,supplier:{platform:"Alibaba",sourceUrl:"https://alibaba.com",unitCost:65}},
+  {id:"ST-IA-001",sku:"ST-IA-001",category:"interior-accessories",name:"غطاء مقود جلد فاخر",description:"غطاء مقود من الجلد الطبيعي مع خيط ذهبي، مخصص لمرسيدس",price:199,images:["https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&q=80"],specs:["جلد طبيعي","خيط ذهبي","38cm"],compatibility:"Mercedes 38cm",inStock:true,featured:false,supplier:{platform:"AliExpress",sourceUrl:"https://aliexpress.com",unitCost:25}}
+];
+
+function saveOrder(order) {
+  const orders = getOrders();
+  const newOrder = {...order,id:`ST-ORD-${Date.now()}`,createdAt:new Date().toISOString(),status:'pending',statusHistory:[{status:'pending',date:new Date().toISOString(),note:'تم استلام الطلب'}]};
+  orders.unshift(newOrder);
+  localStorage.setItem('startorque_orders',JSON.stringify(orders));
+  return newOrder;
+}
+function getOrders() { try{return JSON.parse(localStorage.getItem('startorque_orders')||'[]')}catch{return[]} }
+function updateOrderStatus(id,status,note='') {
+  const orders=getOrders();const idx=orders.findIndex(o=>o.id===id);
+  if(idx===-1)return null;
+  orders[idx].status=status;orders[idx].statusHistory=orders[idx].statusHistory||[];
+  orders[idx].statusHistory.push({status,date:new Date().toISOString(),note});
+  localStorage.setItem('startorque_orders',JSON.stringify(orders));return orders[idx];
+}
+function deleteOrder(id){localStorage.setItem('startorque_orders',JSON.stringify(getOrders().filter(o=>o.id!==id)))}
+
+const ORDER_STATUSES={pending:{label:'في الانتظار',color:'#f59e0b'},confirmed:{label:'تم التأكيد',color:'#3b82f6'},processing:{label:'قيد التجهيز',color:'#8b5cf6'},shipped:{label:'تم الشحن',color:'#06b6d4'},delivered:{label:'تم التوصيل',color:'#22c55e'},cancelled:{label:'ملغي',color:'#ef4444'}};
+
+function Navbar({page,setPage,count}){
+  return(
+    <nav style={{background:'rgba(8,8,8,0.97)',borderBottom:'1px solid #1a1a1a',position:'sticky',top:0,zIndex:100}}>
+      <div className="container" style={{display:'flex',alignItems:'center',justifyContent:'space-between',height:64}}>
+        <div onClick={()=>setPage('home')} style={{cursor:'pointer',display:'flex',alignItems:'center',gap:10}}>
+          <div style={{width:38,height:38,borderRadius:'50%',background:'linear-gradient(135deg,#c8960c,#f0d060)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:900,fontSize:13,color:'#080808'}}>ST</div>
+          <span style={{fontWeight:800,fontSize:20,color:'#c8960c'}}>StarTorque</span>
+        </div>
+        <div style={{display:'flex',gap:4}}>
+          {[['home','الرئيسية'],['catalog','الكتالوج'],['track','تتبع']].map(([p,l])=>(
+            <button key={p} onClick={()=>setPage(p)} style={{background:'none',border:'none',color:page===p?'#c8960c':'#aaa',fontSize:14,fontWeight:600,padding:'8px 12px',borderRadius:8,cursor:'pointer',borderBottom:page===p?'2px solid #c8960c':'2px solid transparent'}}>{l}</button>
+          ))}
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          <a href="https://wa.me/966500000000?text=مرحباً" target="_blank" style={{background:'#25D366',color:'#fff',border:'none',padding:'7px 13px',borderRadius:8,fontSize:13,fontWeight:700}}>واتساب</a>
+          <button onClick={()=>setPage('cart')} style={{background:count>0?'rgba(200,150,12,0.15)':'transparent',border:'1.5px solid #2a2a2a',color:'#e8e8e8',padding:'7px 13px',borderRadius:8,cursor:'pointer',display:'flex',alignItems:'center',gap:6,fontSize:14,fontWeight:600}}>
+            🛒{count>0&&<span style={{background:'#c8960c',color:'#080808',borderRadius:'50%',width:20,height:20,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:900}}>{count}</span>}
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+function ProductCard({product,setPage,setCurrentProduct,addToCart}){
+  return(
+    <div className="card" style={{display:'flex',flexDirection:'column'}}>
+      <div onClick={()=>{setCurrentProduct(product);setPage('product')}} style={{cursor:'pointer',overflow:'hidden',height:200,background:'#141414',position:'relative'}}>
+        <img src={product.images[0]} alt={product.name} style={{width:'100%',height:'100%',objectFit:'cover'}} onError={e=>{e.target.src='https://via.placeholder.com/400x200/141414/c8960c?text=StarTorque'}}/>
+        {product.featured&&<span style={{position:'absolute',top:10,right:10,background:'linear-gradient(135deg,#c8960c,#f0d060)',color:'#080808',fontSize:11,fontWeight:800,padding:'3px 10px',borderRadius:20}}>مميز</span>}
+        <span style={{position:'absolute',top:10,left:10,background:product.inStock?'rgba(34,197,94,0.15)':'rgba(239,68,68,0.15)',color:product.inStock?'#22c55e':'#ef4444',fontSize:11,padding:'3px 10px',borderRadius:20}}>{product.inStock?'متوفر':'نفذ'}</span>
+      </div>
+      <div style={{padding:16,flex:1,display:'flex',flexDirection:'column',gap:10}}>
+        <p style={{color:'#666',fontSize:11}}>SKU: {product.sku}</p>
+        <h3 onClick={()=>{setCurrentProduct(product);setPage('product')}} style={{fontSize:15,fontWeight:700,cursor:'pointer',lineHeight:1.4}}>{product.name}</h3>
+        <p style={{color:'#888',fontSize:12,lineHeight:1.6,flex:1}}>{product.description.substring(0,90)}...</p>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <span style={{fontSize:20,fontWeight:800,color:'#c8960c'}}>{product.price} <span style={{fontSize:12,color:'#666'}}>ريال</span></span>
+          <button className="btn-gold" style={{padding:'8px 16px',fontSize:13}} onClick={()=>addToCart(product)} disabled={!product.inStock}>{product.inStock?'+ السلة':'نفذ'}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Home({setPage,setCurrentProduct,addToCart}){
+  const featured=products.filter(p=>p.featured);
+  return(
+    <div>
+      <section style={{minHeight:'90vh',background:'linear-gradient(135deg,#080808,#0d0d0d)',display:'flex',alignItems:'center'}}>
+        <div className="container">
+          <div style={{maxWidth:680}}>
+            <span style={{display:'inline-block',background:'rgba(200,150,12,0.1)',border:'1px solid rgba(200,150,12,0.3)',color:'#c8960c',fontSize:12,fontWeight:700,padding:'6px 16px',borderRadius:20,marginBottom:24}}>★ متخصصون في مرسيدس</span>
+            <h1 style={{fontSize:'clamp(32px,6vw,60px)',fontWeight:900,lineHeight:1.15,marginBottom:20}}>إكسسوارات<br/><span style={{background:'linear-gradient(135deg,#c8960c,#f0d060)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>مرسيدس المتوافقة</span></h1>
+            <p style={{color:'#888',fontSize:17,lineHeight:1.8,marginBottom:36}}>أرقى إكسسوارات الداخلية — إضاءة محيطية، تعطير ذكي، وإكسسوارات فاخرة.</p>
+            <div style={{display:'flex',gap:14,flexWrap:'wrap'}}>
+              <button className="btn-gold" style={{fontSize:16,padding:'14px 32px'}} onClick={()=>setPage('catalog')}>استعرض الكتالوج</button>
+              <a href="https://wa.me/966500000000?text=مرحباً" target="_blank" style={{background:'rgba(37,211,102,0.1)',border:'1.5px solid #25D366',color:'#25D366',padding:'14px 28px',borderRadius:8,fontSize:16,fontWeight:700}}>واتساب</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section style={{padding:'60px 0 40px'}}>
+        <div className="container">
+          <div style={{textAlign:'center',marginBottom:40}}><h2 className="section-title">تسوق حسب <span>الفئة</span></h2></div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))',gap:12}}>
+            {categories.map(cat=>(
+              <button key={cat.id} onClick={()=>setPage('catalog')} style={{background:'#0d0d0d',border:'1px solid #1a1a1a',borderRadius:12,padding:'18px 10px',cursor:'pointer',textAlign:'center',color:'#e8e8e8'}}>
+                <div style={{fontSize:26,marginBottom:8}}>{cat.icon}</div>
+                <div style={{fontSize:12,fontWeight:600}}>{cat.name}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section style={{padding:'20px 0 80px'}}>
+        <div className="container">
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:32}}>
+            <h2 className="section-title">المنتجات <span>المميزة</span></h2>
+            <button className="btn-outline" onClick={()=>setPage('catalog')}>عرض الكل</button>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:20}}>
+            {featured.map(p=><ProductCard key={p.id} product={p} setPage={setPage} setCurrentProduct={setCurrentProduct} addToCart={addToCart}/>)}
+          </div>
+        </div>
+      </section>
+      <footer style={{background:'#0d0d0d',borderTop:'1px solid #1a1a1a',padding:'40px 0 24px'}}>
+        <div className="container" style={{textAlign:'center'}}>
+          <p style={{color:'#444',fontSize:12,marginBottom:8}}>StarTorque علامة تجارية مستقلة غير تابعة لشركة Mercedes-Benz Group AG.</p>
+          <p style={{color:'#333',fontSize:12}}>© {new Date().getFullYear()} StarTorque — startorque.store</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function Catalog({setPage,setCurrentProduct,addToCart}){
+  const [search,setSearch]=useState('');
+  const [cat,setCat]=useState('all');
+  const filtered=products.filter(p=>(cat==='all'||p.category===cat)&&(!search||p.name.includes(search)));
+  return(
+    <div style={{padding:'40px 0 80px'}}>
+      <div className="container">
+        <h1 className="section-title" style={{marginBottom:8}}>كتالوج <span>المنتجات</span></h1>
+        <p className="section-sub">{products.length} منتج متوفر</p>
+        <input placeholder="ابحث..." value={search} onChange={e=>setSearch(e.target.value)} style={{width:'100%',maxWidth:400,background:'#141414',border:'1px solid #2a2a2a',color:'#e8e8e8',padding:'12px 16px',borderRadius:10,fontSize:14,marginBottom:20,fontFamily:'inherit'}}/>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:28}}>
+          <button onClick={()=>setCat('all')} style={{padding:'7px 14px',borderRadius:20,fontSize:13,fontWeight:600,cursor:'pointer',background:cat==='all'?'linear-gradient(135deg,#c8960c,#f0d060)':'#141414',color:cat==='all'?'#080808':'#888',border:cat==='all'?'none':'1px solid #2a2a2a'}}>الكل</button>
+          {categories.map(c=><button key={c.id} onClick={()=>setCat(c.id)} style={{padding:'7px 14px',borderRadius:20,fontSize:13,fontWeight:600,cursor:'pointer',background:cat===c.id?'linear-gradient(135deg,#c8960c,#f0d060)':'#141414',color:cat===c.id?'#080808':'#888',border:cat===c.id?'none':'1px solid #2a2a2a'}}>{c.icon} {c.name}</button>)}
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:20}}>
+          {filtered.map(p=><ProductCard key={p.id} product={p} setPage={setPage} setCurrentProduct={setCurrentProduct} addToCart={addToCart}/>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProductDetail({product,setPage,addToCart}){
+  const [qty,setQty]=useState(1);
+  if(!product)return<div style={{textAlign:'center',padding:'100px 20px',color:'#666'}}><p style={{fontSize:48,marginBottom:16}}>😕</p><button className="btn-gold" onClick={()=>setPage('catalog')}>الكتالوج</button></div>;
+  return(
+    <div style={{padding:'40px 0 80px'}}>
+      <div className="container">
+        <button onClick={()=>setPage('catalog')} style={{background:'none',border:'none',color:'#888',cursor:'pointer',marginBottom:24,fontSize:14}}>← رجوع</button>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:40}}>
+          <div style={{background:'#141414',borderRadius:14,overflow:'hidden',height:360}}>
+            <img src={product.images[0]} alt={product.name} style={{width:'100%',height:'100%',objectFit:'cover'}} onError={e=>{e.target.src='https://via.placeholder.com/600x360/141414/c8960c?text=StarTorque'}}/>
+          </div>
+          <div>
+            <p style={{color:'#555',fontSize:12,marginBottom:8}}>SKU: {product.sku}</p>
+            <h1 style={{fontSize:24,fontWeight:800,marginBottom:12}}>{product.name}</h1>
+            <p style={{color:'#888',fontSize:15,lineHeight:1.8,marginBottom:20}}>{product.description}</p>
+            <div style={{background:'#0d0d0d',border:'1px solid #1a1a1a',borderRadius:12,padding:16,marginBottom:20}}>
+              {product.specs.map(s=><div key={s} style={{fontSize:13,color:'#aaa',marginBottom:6}}>✓ {s}</div>)}
+              <div style={{fontSize:13,color:'#666',marginTop:8}}>التوافق: {product.compatibility}</div>
+            </div>
+            <div style={{fontSize:32,fontWeight:900,color:'#c8960c',marginBottom:16}}>{product.price} <span style={{fontSize:14,color:'#555'}}>ريال</span></div>
+            <div style={{display:'flex',gap:12,marginBottom:12}}>
+              <div style={{display:'flex',alignItems:'center',border:'1px solid #2a2a2a',borderRadius:8,overflow:'hidden'}}>
+                <button onClick={()=>setQty(Math.max(1,qty-1))} style={{background:'#141414',border:'none',color:'#e8e8e8',width:36,height:40,cursor:'pointer',fontSize:18}}>-</button>
+                <span style={{width:40,textAlign:'center',fontWeight:700}}>{qty}</span>
+                <button onClick={()=>setQty(qty+1)} style={{background:'#141414',border:'none',color:'#e8e8e8',width:36,height:40,cursor:'pointer',fontSize:18}}>+</button>
+              </div>
+              <button className="btn-gold" style={{flex:1}} onClick={()=>addToCart(product,qty)}>🛒 أضف للسلة</button>
+            </div>
+            <a href={`https://wa.me/966500000000?text=أريد الاستفسار عن ${product.name}`} target="_blank" className="btn-outline" style={{display:'block',textAlign:'center',padding:'11px'}}>واتساب</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Cart({cart,removeFromCart,updateQty,clearCart,total,setPage,showToast}){
+  const [showCheckout,setShowCheckout]=useState(false);
+  const [form,setForm]=useState({name:'',phone:'',city:'',address:'',notes:'',method:'whatsapp'});
+  const [submitted,setSubmitted]=useState(null);
+  function handleSubmit(){
+    if(!form.name||!form.phone||!form.city)return showToast('يرجى تعبئة الحقول المطلوبة');
+    const order=saveOrder({customer:form,items:cart.map(i=>({id:i.id,name:i.name,sku:i.sku,price:i.price,quantity:i.quantity})),total,paymentMethod:form.method,notes:form.notes});
+    if(form.method==='whatsapp'){
+      const msg=encodeURIComponent(`*طلب جديد #${order.id}*\nالعميل: ${form.name}\nالهاتف: ${form.phone}\nالإجمالي: ${total} ريال`);
+      window.open(`https://wa.me/966500000000?text=${msg}`,'_blank');
+    }
+    setSubmitted(order);clearCart();
+  }
+  if(submitted)return(
+    <div style={{padding:'80px 20px',textAlign:'center',maxWidth:500,margin:'0 auto'}}>
+      <div style={{fontSize:64,marginBottom:20}}>🎉</div>
+      <h2 style={{fontSize:24,fontWeight:800,color:'#22c55e',marginBottom:12}}>تم استلام طلبك!</h2>
+      <p style={{color:'#888',marginBottom:8}}>رقم الطلب: <span style={{color:'#c8960c',fontWeight:700}}>{submitted.id}</span></p>
+      <div style={{display:'flex',gap:12,justifyContent:'center',marginTop:24}}>
+        <button className="btn-gold" onClick={()=>setPage('track')}>تتبع الطلب</button>
+        <button className="btn-outline" onClick={()=>setPage('catalog')}>متابعة التسوق</button>
+      </div>
+    </div>
+  );
+  if(cart.length===0)return(
+    <div style={{padding:'80px 20px',textAlign:'center'}}>
+      <div style={{fontSize:64,marginBottom:20}}>🛒</div>
+      <h2 style={{marginBottom:16}}>السلة فارغة</h2>
+      <button className="btn-gold" onClick={()=>setPage('catalog')}>استعرض الكتالوج</button>
+    </div>
+  );
+  return(
+    <div style={{padding:'40px 0 80px'}}>
+      <div className="container" style={{maxWidth:800}}>
+        <h1 className="section-title" style={{marginBottom:32}}>سلة <span>التسوق</span></h1>
+        {cart.map(item=>(
+          <div key={item.id} className="card" style={{padding:16,display:'flex',gap:14,alignItems:'center',marginBottom:12}}>
+            <img src={item.images?.[0]} alt={item.name} style={{width:70,height:70,borderRadius:8,objectFit:'cover'}} onError={e=>{e.target.src='https://via.placeholder.com/70/141414/c8960c?text=ST'}}/>
+            <div style={{flex:1}}>
+              <p style={{fontWeight:700,fontSize:14}}>{item.name}</p>
+              <p style={{color:'#555',fontSize:12}}>SKU: {item.sku}</p>
+            </div>
+            <div style={{display:'flex',alignItems:'center',border:'1px solid #2a2a2a',borderRadius:8,overflow:'hidden'}}>
+              <button onClick={()=>updateQty(item.id,item.quantity-1)} style={{background:'#141414',border:'none',color:'#e8e8e8',width:30,height:34,cursor:'pointer'}}>-</button>
+              <span style={{width:34,textAlign:'center',fontWeight:700}}>{item.quantity}</span>
+              <button onClick={()=>updateQty(item.id,item.quantity+1)} style={{background:'#141414',border:'none',color:'#e8e8e8',width:30,height:34,cursor:'pointer'}}>+</button>
+            </div>
+            <span style={{color:'#c8960c',fontWeight:800,minWidth:70,textAlign:'left'}}>{item.price*item.quantity} ريال</span>
+            <button onClick={()=>removeFromCart(item.id)} style={{background:'none',border:'none',color:'#555',cursor:'pointer',fontSize:18}}>✕</button>
+          </div>
+        ))}
+        <div style={{background:'#0d0d0d',border:'1px solid #1a1a1a',borderRadius:14,padding:20,marginBottom:20,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <span style={{fontSize:18,fontWeight:700}}>الإجمالي</span>
+          <span style={{fontSize:28,fontWeight:900,color:'#c8960c'}}>{total} <span style={{fontSize:14,color:'#666'}}>ريال</span></span>
+        </div>
+        <button className="btn-gold" style={{width:'100%',padding:'15px',fontSize:16}} onClick={()=>setShowCheckout(true)}>المتابعة للطلب</button>
+        {showCheckout&&(
+          <div className="overlay" onClick={e=>e.target===e.currentTarget&&setShowCheckout(false)}>
+            <div className="modal">
+              <h2 style={{fontWeight:800,fontSize:20,marginBottom:20}}>إتمام الطلب</h2>
+              <div className="form-group"><label>الاسم *</label><input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="محمد أحمد"/></div>
+              <div className="form-group"><label>الهاتف *</label><input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="05XXXXXXXX"/></div>
+              <div className="form-group"><label>المدينة *</label><input value={form.city} onChange={e=>setForm({...form,city:e.target.value})} placeholder="الرياض"/></div>
+              <div className="form-group"><label>العنوان</label><textarea rows={2} value={form.address} onChange={e=>setForm({...form,address:e.target.value})}/></div>
+              <div className="form-group"><label>طريقة التواصل</label><select value={form.method} onChange={e=>setForm({...form,method:e.target.value})}><option value="whatsapp">واتساب</option><option value="email">إيميل</option></select></div>
+              <div className="form-group"><label>ملاحظات</label><textarea rows={2} value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}/></div>
+              <div style={{display:'flex',gap:10}}>
+                <button className="btn-gold" style={{flex:1,padding:'12px'}} onClick={handleSubmit}>تأكيد الطلب</button>
+                <button className="btn-outline" onClick={()=>setShowCheckout(false)}>إلغاء</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Track(){
+  const [q,setQ]=useState('');const [result,setResult]=useState(null);const [searched,setSearched]=useState(false);
+  function search(){const orders=getOrders();setResult(orders.find(o=>o.id===q.trim()||o.customer?.phone===q.trim())||null);setSearched(true);}
+  return(
+    <div style={{padding:'60px 0 100px'}}>
+      <div className="container" style={{maxWidth:600}}>
+        <h1 className="section-title" style={{marginBottom:8}}>تتبع <span>الطلب</span></h1>
+        <p className="section-sub">أدخل رقم الطلب أو رقم الهاتف</p>
+        <div style={{display:'flex',gap:10,marginBottom:32}}>
+          <input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&search()} placeholder="ST-ORD-..." style={{flex:1,background:'#141414',border:'1px solid #2a2a2a',color:'#e8e8e8',padding:'12px 16px',borderRadius:10,fontSize:14,fontFamily:'inherit'}}/>
+          <button className="btn-gold" onClick={search}>بحث</button>
+        </div>
+        {searched&&!result&&<div style={{textAlign:'center',padding:'40px',color:'#555'}}><div style={{fontSize:40,marginBottom:12}}>🔍</div><p>لم يعثر على طلب</p></div>}
+        {result&&(
+          <div className="card" style={{padding:24}}>
+            <div style={{display:'flex',justifyContent:'space-between',marginBottom:16}}>
+              <div><p style={{color:'#555',fontSize:12}}>رقم الطلب</p><p style={{fontWeight:800,color:'#c8960c'}}>{result.id}</p></div>
+              <span style={{background:ORDER_STATUSES[result.status]?.color+'22',color:ORDER_STATUSES[result.status]?.color,padding:'5px 12px',borderRadius:20,fontWeight:700,fontSize:13}}>{ORDER_STATUSES[result.status]?.label}</span>
+            </div>
+            {result.items?.map(item=>(
+              <div key={item.id} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid #1a1a1a',fontSize:13}}>
+                <span style={{color:'#aaa'}}>{item.name} × {item.quantity}</span>
+                <span style={{color:'#c8960c',fontWeight:700}}>{item.price*item.quantity} ريال</span>
+              </div>
+            ))}
+            <div style={{display:'flex',justifyContent:'space-between',paddingTop:12,fontWeight:800}}>
+              <span>الإجمالي</span><span style={{color:'#c8960c'}}>{result.total} ريال</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Admin(){
+  const [authed,setAuthed]=useState(false);const [pw,setPw]=useState('');const [orders,setOrders]=useState([]);const [tab,setTab]=useState('orders');const [sel,setSel]=useState(null);const [newStatus,setNewStatus]=useState('');const [note,setNote]=useState('');
+  useEffect(()=>{if(authed)setOrders(getOrders())},[authed]);
+  if(!authed)return(
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'80vh',padding:20}}>
+      <div className="modal" style={{maxWidth:360}}>
+        <div style={{textAlign:'center',marginBottom:24}}>
+          <div style={{width:56,height:56,borderRadius:'50%',background:'linear-gradient(135deg,#c8960c,#f0d060)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:900,fontSize:18,color:'#080808',margin:'0 auto 14px'}}>ST</div>
+          <h2 style={{fontWeight:800,fontSize:20}}>لوحة الإدارة</h2>
+        </div>
+        <div className="form-group"><label>كلمة المرور</label><input type="password" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==='Enter'&&(pw==='ST@admin2025'?setAuthed(true):alert('خطأ'))}/></div>
+        <button className="btn-gold" style={{width:'100%',padding:'12px'}} onClick={()=>pw==='ST@admin2025'?setAuthed(true):alert('كلمة مرور خاطئة')}>دخول</button>
+      </div>
+    </div>
+  );
+  return(
+    <div style={{padding:'32px 0 80px'}}>
+      <div className="container">
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:32}}>
+          <h1 className="section-title">لوحة <span>الإدارة</span></h1>
+          <button className="btn-outline" onClick={()=>setAuthed(false)}>خروج</button>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:14,marginBottom:28}}>
+          {[['الطلبات',orders.length,'#c8960c','📦'],['في الانتظار',orders.filter(o=>o.status==='pending').length,'#f59e0b','⏳'],['موصّل',orders.filter(o=>o.status==='delivered').length,'#22c55e','✅'],['الإيرادات',orders.filter(o=>o.status!=='cancelled').reduce((s,o)=>s+o.total,0)+' ر','#3b82f6','💰']].map(([l,v,c,i])=>(
+            <div key={l} className="card" style={{padding:18}}>
+              <div style={{fontSize:22,marginBottom:6}}>{i}</div>
+              <div style={{fontSize:24,fontWeight:900,color:c}}>{v}</div>
+              <div style={{fontSize:12,color:'#555'}}>{l}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{display:'flex',gap:8,marginBottom:20,borderBottom:'1px solid #1a1a1a'}}>
+          {[['orders','الطلبات'],['products','المنتجات'],['suppliers','الموردون']].map(([id,label])=>(
+            <button key={id} onClick={()=>setTab(id)} style={{background:'none',border:'none',color:tab===id?'#c8960c':'#555',fontSize:14,fontWeight:700,padding:'10px 16px',cursor:'pointer',borderBottom:tab===id?'2px solid #c8960c':'2px solid transparent'}}>{label}</button>
+          ))}
+        </div>
+        {tab==='orders'&&(orders.length===0?<div style={{textAlign:'center',padding:'60px',color:'#444'}}>لا توجد طلبات بعد</div>:orders.map(order=>(
+          <div key={order.id} className="card" style={{padding:18,marginBottom:10}}>
+            <div style={{display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:10}}>
+              <div><p style={{fontWeight:800,color:'#c8960c'}}>{order.id}</p><p style={{color:'#aaa',fontSize:13,marginTop:3}}>{order.customer?.name} — {order.customer?.phone}</p></div>
+              <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
+                <span style={{background:ORDER_STATUSES[order.status]?.color+'22',color:ORDER_STATUSES[order.status]?.color,padding:'4px 10px',borderRadius:20,fontWeight:700,fontSize:12}}>{ORDER_STATUSES[order.status]?.label}</span>
+                <span style={{color:'#c8960c',fontWeight:800}}>{order.total} ريال</span>
+                <button onClick={()=>setSel(order)} style={{background:'rgba(200,150,12,0.1)',border:'1px solid #c8960c55',color:'#c8960c',padding:'4px 10px',borderRadius:8,cursor:'pointer',fontSize:12}}>تعديل</button>
+                <button onClick={()=>{if(window.confirm('حذف؟')){deleteOrder(order.id);setOrders(getOrders())}}} style={{background:'rgba(239,68,68,0.1)',border:'1px solid #ef444444',color:'#ef4444',padding:'4px 10px',borderRadius:8,cursor:'pointer',fontSize:12}}>حذف</button>
+              </div>
+            </div>
+          </div>
+        )))}
+        {tab==='products'&&products.map(p=>(
+          <div key={p.id} className="card" style={{padding:14,display:'flex',gap:12,alignItems:'center',marginBottom:10}}>
+            <img src={p.images[0]} alt={p.name} style={{width:56,height:56,borderRadius:8,objectFit:'cover'}} onError={e=>{e.target.src='https://via.placeholder.com/56/141414/c8960c?text=ST'}}/>
+            <div style={{flex:1}}><p style={{fontWeight:700,fontSize:14}}>{p.name}</p><p style={{color:'#555',fontSize:12}}>SKU: {p.sku}</p></div>
+            <p style={{color:'#c8960c',fontWeight:800}}>{p.price} ريال</p>
+            <span style={{color:p.inStock?'#22c55e':'#ef4444',fontSize:12}}>{p.inStock?'✓':'✗'}</span>
+          </div>
+        ))}
+        {tab==='suppliers'&&products.map(p=>(
+          <div key={p.id} className="card" style={{padding:14,marginBottom:10}}>
+            <div style={{display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:8}}>
+              <div><p style={{fontWeight:700,fontSize:14}}>{p.name}</p><p style={{color:'#c8960c',fontSize:13}}>{p.supplier.platform}</p></div>
+              <div><p style={{color:'#22c55e',fontWeight:700}}>تكلفة: {p.supplier.unitCost}$</p><a href={p.supplier.sourceUrl} target="_blank" style={{color:'#3b82f6',fontSize:12}}>رابط المصدر ↗</a></div>
+            </div>
+          </div>
+        ))}
+        {sel&&(
+          <div className="overlay" onClick={e=>e.target===e.currentTarget&&setSel(null)}>
+            <div className="modal">
+              <h3 style={{fontWeight:800,marginBottom:20}}>تحديث الطلب {sel.id}</h3>
+              <div className="form-group"><label>الحالة</label><select value={newStatus} onChange={e=>setNewStatus(e.target.value)}><option value="">اختر</option>{Object.entries(ORDER_STATUSES).map(([k,s])=><option key={k} value={k}>{s.label}</option>)}</select></div>
+              <div className="form-group"><label>ملاحظة</label><input value={note} onChange={e=>setNote(e.target.value)}/></div>
+              <div style={{display:'flex',gap:10}}>
+                <button className="btn-gold" style={{flex:1}} onClick={()=>{if(newStatus){updateOrderStatus(sel.id,newStatus,note);setOrders(getOrders());setSel(null);setNewStatus('');setNote('')}}}>حفظ</button>
+                <button className="btn-outline" onClick={()=>setSel(null)}>إلغاء</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [page,setPage]=useState('home');
+  const [currentProduct,setCurrentProduct]=useState(null);
+  const [cart,setCart]=useState([]);
+  const [toast,setToast]=useState(null);
+
+  function showToast(msg){setToast(msg);setTimeout(()=>setToast(null),3000)}
+  function addToCart(product,qty=1){
+    setCart(prev=>{const ex=prev.find(i=>i.id===product.id);if(ex)return prev.map(i=>i.id===product.id?{...i,quantity:i.quantity+qty}:i);return[...prev,{...product,quantity:qty}]});
+    showToast(`تمت إضافة "${product.name}" للسلة`);
+  }
+  function removeFromCart(id){setCart(prev=>prev.filter(i=>i.id!==id))}
+  function updateQty(id,qty){if(qty<1)return removeFromCart(id);setCart(prev=>prev.map(i=>i.id===id?{...i,quantity:qty}:i))}
+  function clearCart(){setCart([])}
+  const total=cart.reduce((s,i)=>s+i.price*i.quantity,0);
+  const count=cart.reduce((s,i)=>s+i.quantity,0);
+
+  return(
+    <div style={{minHeight:'100vh',display:'flex',flexDirection:'column'}}>
+      <Navbar page={page} setPage={setPage} count={count}/>
+      <main style={{flex:1}}>
+        {page==='home'&&<Home setPage={setPage} setCurrentProduct={setCurrentProduct} addToCart={addToCart}/>}
+        {page==='catalog'&&<Catalog setPage={setPage} setCurrentProduct={setCurrentProduct} addToCart={addToCart}/>}
+        {page==='product'&&<ProductDetail product={currentProduct} setPage={setPage} addToCart={addToCart}/>}
+        {page==='cart'&&<Cart cart={cart} removeFromCart={removeFromCart} updateQty={updateQty} clearCart={clearCart} total={total} setPage={setPage} showToast={showToast}/>}
+        {page==='track'&&<Track/>}
+        {page==='admin'&&<Admin/>}
+      </main>
+      {toast&&<div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
