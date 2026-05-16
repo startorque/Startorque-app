@@ -56,14 +56,66 @@ const categories = [
 ];
 
 const products = [
-  {id:"ST-WL-001",sku:"ST-WL-001",category:"welcome-lights",name:"لمبات ترحيبية LED للأبواب",description:"لمبات LED ترحيبية بشعار مرسيدس، تضاء تلقائياً عند فتح الباب، متوافقة مع معظم موديلات مرسيدس 2015+",price:149,images:["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"],specs:["LED عالي الإضاءة","تركيب plug & play","شعار مرسيدس","ضمان 6 أشهر"],compatibility:"Mercedes C/E/S/GLC/GLE 2015+",inStock:true,featured:true,supplier:{platform:"Alibaba",sourceUrl:"https://alibaba.com",unitCost:18}},
-  {id:"ST-AC-001",sku:"ST-AC-001",category:"ac-vents",name:"فتحات مكيف مضيئة 7 ألوان RGB",description:"إضاءة محيطية ملونة لفتحات المكيف، 7 ألوان قابلة للتخصيص، تضفي جواً فاخراً على الداخلية",price:199,images:["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&q=80"],specs:["7 ألوان RGB","تحكم بالتطبيق","USB-C","وضع موسيقي"],compatibility:"جميع السيارات",inStock:true,featured:true,supplier:{platform:"AliExpress",sourceUrl:"https://aliexpress.com",unitCost:22}},
-  {id:"ST-SP-001",sku:"ST-SP-001",category:"speakers",name:"سماعات داخلية مضيئة",description:"أطواق LED مضيئة تركب حول سماعات الداخلية، تتزامن مع الموسيقى",price:249,images:["https://images.unsplash.com/photo-1547949003-9792a18a2601?w=600&q=80"],specs:["إضاءة مع الصوت","16 لون","تركيب بدون حفر"],compatibility:"Universal",inStock:true,featured:false,supplier:{platform:"1688",sourceUrl:"https://1688.com",unitCost:28}},
-  {id:"ST-PD-001",sku:"ST-PD-001",category:"perfume-device",name:"جهاز تعطير درج السيارة الذكي",description:"جهاز تعطير أوتوماتيكي يوضع في درج السيارة، شحن USB، تصميم أنيق",price:299,images:["https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80"],specs:["3 مستويات شدة","شحن USB-C","خزان 10ml"],compatibility:"جميع السيارات",inStock:true,featured:true,supplier:{platform:"Amazon",sourceUrl:"https://amazon.com",unitCost:45}},
-  {id:"ST-PR-001",sku:"ST-PR-001",category:"perfume-refills",name:"عبوة عطر فاخرة - مسك عود",description:"عبوة إعادة تعبئة بعطر مسك عود فاخر، يدوم حتى 30 يوم",price:89,images:["https://images.unsplash.com/photo-1590156546946-b7b6a8571b11?w=600&q=80"],specs:["10ml","30 يوم","خالٍ من الكحول"],compatibility:"جهاز ST-PD-001",inStock:true,featured:false,supplier:{platform:"Temu",sourceUrl:"https://temu.com",unitCost:8}},
-  {id:"ST-AL-001",sku:"ST-AL-001",category:"ambient-lighting",name:"إضاءة محيطية داخلية 64 لون",description:"طقم إضاءة محيطية كامل، 64 لون، يشمل الأبواب والسقف والأرضية",price:449,images:["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80"],specs:["64 لون","تحكم بالتطبيق","6 متر LED"],compatibility:"Mercedes C/E/S/GLC/GLE",inStock:true,featured:true,supplier:{platform:"Alibaba",sourceUrl:"https://alibaba.com",unitCost:65}},
-  {id:"ST-IA-001",sku:"ST-IA-001",category:"interior-accessories",name:"غطاء مقود جلد فاخر",description:"غطاء مقود من الجلد الطبيعي مع خيط ذهبي، مخصص لمرسيدس",price:199,images:["https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&q=80"],specs:["جلد طبيعي","خيط ذهبي","38cm"],compatibility:"Mercedes 38cm",inStock:true,featured:false,supplier:{platform:"AliExpress",sourceUrl:"https://aliexpress.com",unitCost:25}}
-];
+استبدل const products كاملًا بهذا:
+
+const products = [
+  {
+    id:"ST-WL-001",
+    sku:"ST-WL-001",
+    category:"welcome-lights",
+    name:"لمبات ترحيبية شعار مرسيدس",
+    description:"إضاءة شعار النجمة للأبواب عند الفتح، تركيب مباشر.",
+    price:149,
+    images:["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80"],
+    specs:["LED","شعار مرسيدس","تركيب سريع"],
+    compatibility:"Mercedes",
+    inStock:true,
+    featured:true,
+    supplier:{platform:"Alibaba",sourceUrl:"https://alibaba.com",unitCost:18}
+  },
+  {
+    id:"ST-PF-001",
+    sku:"ST-PF-001",
+    category:"perfume-device",
+    name:"جهاز تعطير S Class",
+    description:"جهاز تعطير داخلي فاخر لفئة S.",
+    price:299,
+    images:["https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=80"],
+    specs:["USB","فاخر"],
+    compatibility:"S Class",
+    inStock:true,
+    featured:true,
+    supplier:{platform:"AliExpress",sourceUrl:"https://aliexpress.com",unitCost:40}
+  },
+  {
+    id:"ST-AMG-001",
+    sku:"ST-AMG-001",
+    category:"perfume-refills",
+    name:"عطر AMG 63",
+    description:"عطر داخلي فاخر مستوحى من AMG.",
+    price:99,
+    images:["https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&q=80"],
+    specs:["رائحة فاخرة"],
+    compatibility:"Universal",
+    inStock:true,
+    featured:true,
+    supplier:{platform:"Amazon",sourceUrl:"https://amazon.com",unitCost:10}
+  },
+  {
+    id:"ST-BR-001",
+    sku:"ST-BR-001",
+    category:"interior-accessories",
+    name:"فحمات Brembo",
+    description:"فحمات أصلية عالية الأداء.",
+    price:349,
+    images:["https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600&q=80"],
+    specs:["Brembo","أداء عالي"],
+    compatibility:"Mercedes",
+    inStock:true,
+    featured:false,
+    supplier:{platform:"Alibaba",sourceUrl:"https://alibaba.com",unitCost:55}
+  }
+]
 
 function saveOrder(order) {
   const orders = getOrders();
